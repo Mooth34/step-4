@@ -8,8 +8,8 @@ $(document).ready(function() {
         "initValue" : "50",
     });
     $("#third").mySlider({
-        "maxValue" : "300",
-        "initValue" : "300",
+        "maxValue" : "50",
+        "initValue" : "10",
     });
 
 });

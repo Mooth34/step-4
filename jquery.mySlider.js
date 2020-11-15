@@ -8,9 +8,10 @@
         let sliders = this;
         let thumbs = sliders.find('.thumb');
         let thumbMiddle = parseInt(getComputedStyle(thumbs[0]).width) / 2;
+        let sliderValue = settings.initValue;
 
         function adaptThumbPosition(){ thumbs.css({
-            "left": (parseInt(getComputedStyle(sliders[0]).width) * (settings.initValue / settings.maxValue))
+            "left": (parseInt(getComputedStyle(sliders[0]).width) * (sliderValue / settings.maxValue))
                 - thumbMiddle + "px",
             "display": "block",
         })}
@@ -28,6 +29,8 @@
         sliders.on('pointerdown', function (event) {
             let currentSlider = event.target;
             let currentThumb = currentSlider.firstElementChild;
+            sliderValue = (event.clientX - currentSlider.getBoundingClientRect().left) /
+                currentSlider.getBoundingClientRect().width * settings.maxValue;
             currentThumb.style.left = (event.clientX - currentSlider.getBoundingClientRect().left - thumbMiddle) + 'px';
         });
 
@@ -35,6 +38,8 @@
             event.preventDefault();
             let currentThumb = event.target;
             let currentSlider = currentThumb.parentElement;
+            sliderValue = (event.clientX - currentSlider.getBoundingClientRect().left) /
+                currentSlider.getBoundingClientRect().width * settings.maxValue;
 
             let shiftX = event.clientX - currentThumb.getBoundingClientRect().left;
 
