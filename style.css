@@ -3,21 +3,51 @@
     border-radius: 5px;
     background: #E6E6E6;
     background: linear-gradient(left top, #E6E6E6, #EEEEEE);
-    /*width: 300px;*/
-    height: 5px;
-    margin: 5px;
+    height: 10px;
+    margin: 30px;
+    margin-top: 80px;
     cursor: pointer;
 }
 
 .thumb {
     display: none;
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     position: relative;
-    left: 10px;
-    top: -7px;
+    left: 20px;
+    top: -15px;
     background: #E75736;
+    color: #FFFFFF;
+    font-family: Helvetica, sans-serif;
+    font-size: 28px;
+    line-height: 1.5;
+    text-align: center;
+    cursor: pointer;
+}
+
+.label {
+    width: 60px;
+    height: 40px;
+    background: #E75736;
+    position: relative;
+    left: -10px;
+    top: -53px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.label:before {
+    content: "";
+    width: 0;
+    height: 0;
+    right: 100%;
+    left: 20px;
+    top: 40px;
+    position: absolute;
+    border-top: 10px solid #E75736;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
     cursor: pointer;
 }
 

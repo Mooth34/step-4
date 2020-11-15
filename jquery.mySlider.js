@@ -6,9 +6,14 @@
         }, options);
 
         let sliders = this;
-        let thumbs = sliders.find('.thumb');
+        let thumbs = sliders.find(".thumb");
         let thumbMiddle = parseInt(getComputedStyle(thumbs[0]).width) / 2;
         let sliderValue = settings.initValue;
+
+        let thumbLabel = document.createElement("div");
+        thumbLabel.classList.add("label");
+        thumbLabel.textContent = "33";
+        thumbs.append(thumbLabel);
 
         function adaptThumbPosition(){
             thumbs.css({
@@ -22,15 +27,14 @@
         })
 
         adaptThumbPosition();
-        window.addEventListener('resize', onResize);
-        function onResize(event) {
+        window.addEventListener('resize', function () {
             adaptThumbPosition();
-        }
-
+        });
 
         sliders.on('pointerdown', function (event) {
             if (event.target.className==="thumb")
                 return;
+            event.preventDefault();
             let currentSlider = event.target;
             let currentThumb = currentSlider.firstElementChild;
             sliderValue = (event.clientX - currentSlider.getBoundingClientRect().left) /
