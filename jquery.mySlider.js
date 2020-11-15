@@ -10,7 +10,8 @@
         let thumbMiddle = parseInt(getComputedStyle(thumbs[0]).width) / 2;
         let sliderValue = settings.initValue;
 
-        function adaptThumbPosition(){ thumbs.css({
+        function adaptThumbPosition(){
+            thumbs.css({
             "left": (parseInt(getComputedStyle(sliders[0]).width) * (sliderValue / settings.maxValue))
                 - thumbMiddle + "px",
             "display": "block",
@@ -21,12 +22,15 @@
         })
 
         adaptThumbPosition();
-        window.onresize = function (event) {
+        window.addEventListener('resize', onResize);
+        function onResize(event) {
             adaptThumbPosition();
-        };
+        }
 
 
         sliders.on('pointerdown', function (event) {
+            if (event.target.className==="thumb")
+                return;
             let currentSlider = event.target;
             let currentThumb = currentSlider.firstElementChild;
             sliderValue = (event.clientX - currentSlider.getBoundingClientRect().left) /
@@ -47,16 +51,20 @@
             document.addEventListener('pointerup', onMouseUp);
 
             function onMouseMove(event) {
-                let newLeft = event.clientX - shiftX - currentSlider.getBoundingClientRect().left;
+                sliderValue = (event.clientX - currentSlider.getBoundingClientRect().left) /
+                    currentSlider.getBoundingClientRect().width * settings.maxValue;
+                if (sliderValue < 0)
+                    sliderValue = 0;
+                if (sliderValue > settings.maxValue)
+                    sliderValue = settings.maxValue;
 
+                let newLeft = event.clientX - shiftX - currentSlider.getBoundingClientRect().left;
                 // курсор вышел из слайдера => оставить бегунок в его границах.
-                if (newLeft < -thumbMiddle) {
+                if (newLeft < -thumbMiddle)
                     newLeft = -thumbMiddle;
-                }
                 let rightEdge = currentSlider.offsetWidth - currentThumb.offsetWidth;
-                if (newLeft > rightEdge + thumbMiddle) {
+                if (newLeft > rightEdge + thumbMiddle)
                     newLeft = rightEdge + thumbMiddle;
-                }
 
                 currentThumb.style.left = newLeft + 'px';
             }
