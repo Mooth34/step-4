@@ -2,7 +2,9 @@
 
     $.fn.mySlider = function (options) {
         let settings = $.extend({
-
+            "minValue": "0",
+            "maxValue" : "10",
+            "initValue" : "0",
         }, options);
 
         let sliders = this;
@@ -12,18 +14,19 @@
 
         let thumbLabel = document.createElement("div");
         thumbLabel.classList.add("label");
-        thumbLabel.textContent = "33";
+        thumbLabel.textContent = settings.initValue;
         thumbs.append(thumbLabel);
 
-        function adaptThumbPosition(){
+        function adaptThumbPosition() {
             thumbs.css({
-            "left": (parseInt(getComputedStyle(sliders[0]).width) * (sliderValue / settings.maxValue))
-                - thumbMiddle + "px",
-            "display": "block",
-        })}
+                "left": (parseInt(getComputedStyle(sliders[0]).width) *
+                    ((sliderValue - settings.minValue) / (settings.maxValue - settings.minValue))) - thumbMiddle + "px",
+                "display": "block",
+            })
+        }
 
         sliders.css({
-            "display" : "block",
+            "display": "block",
         })
 
         adaptThumbPosition();
@@ -31,14 +34,19 @@
             adaptThumbPosition();
         });
 
+        function changeSliderValue(event, currentSlider){
+            sliderValue = (event.clientX - currentSlider.getBoundingClientRect().left) /
+                currentSlider.getBoundingClientRect().width * (settings.maxValue - settings.minValue);
+            sliderValue = +settings.minValue + sliderValue;
+        }
+
         sliders.on('pointerdown', function (event) {
-            if (event.target.className==="thumb")
+            if (event.target.className === "thumb")
                 return;
             event.preventDefault();
             let currentSlider = event.target;
             let currentThumb = currentSlider.firstElementChild;
-            sliderValue = (event.clientX - currentSlider.getBoundingClientRect().left) /
-                currentSlider.getBoundingClientRect().width * settings.maxValue;
+            changeSliderValue(event, currentSlider);
             currentThumb.style.left = (event.clientX - currentSlider.getBoundingClientRect().left - thumbMiddle) + 'px';
         });
 
@@ -46,8 +54,7 @@
             event.preventDefault();
             let currentThumb = event.target;
             let currentSlider = currentThumb.parentElement;
-            sliderValue = (event.clientX - currentSlider.getBoundingClientRect().left) /
-                currentSlider.getBoundingClientRect().width * settings.maxValue;
+            changeSliderValue(event, currentSlider);
 
             let shiftX = event.clientX - currentThumb.getBoundingClientRect().left;
 
@@ -55,10 +62,9 @@
             document.addEventListener('pointerup', onMouseUp);
 
             function onMouseMove(event) {
-                sliderValue = (event.clientX - currentSlider.getBoundingClientRect().left) /
-                    currentSlider.getBoundingClientRect().width * settings.maxValue;
-                if (sliderValue < 0)
-                    sliderValue = 0;
+                changeSliderValue(event, currentSlider);
+                if (sliderValue < settings.minValue)
+                    sliderValue = settings.minValue;
                 if (sliderValue > settings.maxValue)
                     sliderValue = settings.maxValue;
 
@@ -71,6 +77,7 @@
                     newLeft = rightEdge + thumbMiddle;
 
                 currentThumb.style.left = newLeft + 'px';
+                currentThumb.firstElementChild.textContent = Math.ceil(sliderValue);
             }
 
             function onMouseUp() {

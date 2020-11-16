@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $("#first").mySlider({
-        "maxValue" : "300",
+        "maxValue" : "200",
+        "minValue": "-100",
         "initValue" : "100",
     });
     $("#second").mySlider({
