@@ -46,8 +46,9 @@
             event.preventDefault();
             let currentSlider = event.target;
             let currentThumb = currentSlider.firstElementChild;
-            changeSliderValue(event, currentSlider);
             currentThumb.style.left = (event.clientX - currentSlider.getBoundingClientRect().left - thumbMiddle) + 'px';
+            changeSliderValue(event, currentSlider);
+            currentThumb.firstElementChild.textContent = Math.ceil(sliderValue);
         });
 
         thumbs.on('pointerdown', function (event) {
