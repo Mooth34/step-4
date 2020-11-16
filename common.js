@@ -11,6 +11,7 @@ $(document).ready(function() {
     $("#third").mySlider({
         "maxValue" : "50",
         "initValue" : "10",
+        "scale" : "10",
     });
 
 });
